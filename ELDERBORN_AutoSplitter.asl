@@ -81,13 +81,13 @@ start
 // Split
 split
 {	
-	bool janusDedSplit = vars.janusSplit == 0 && current.janusDead == 1 && old.janusDead == 0 && settings["optionJanus"] && current.world == 1;
+	bool janusDedSplit = vars.janusSplit == 0 && current.janusDead == 1 && old.janusDead == 0 && settings["optionJanus"] && current.world == 1 && current.loading == 0;
 
-	bool towerRedDeadSplit = vars.redSplit == 0 && current.towerRedDead == 1 && old.towerRedDead == 0 && settings["optionRedTower"] && current.world == 2;
+	bool towerRedDeadSplit = vars.redSplit == 0 && current.towerRedDead == 1 && old.towerRedDead == 0 && settings["optionRedTower"] && current.world == 2 && current.loading == 0;
 
-	bool towerYellowDeadSplit = vars.yellowSplit == 0 && current.towerYellowDead == 1 && old.towerYellowDead == 0 && settings["optionYellowTower"] && current.world == 2;
+	bool towerYellowDeadSplit = vars.yellowSplit == 0 && current.towerYellowDead == 1 && old.towerYellowDead == 0 && settings["optionYellowTower"] && current.world == 2 && current.loading == 0;
 
-	bool towerBlueDeadSplit = vars.blueSplit == 0 && current.towerBlueDead == 1 && old.towerBlueDead == 0 && settings["optionBlueTower"] && current.world == 2;
+	bool towerBlueDeadSplit = vars.blueSplit == 0 && current.towerBlueDead == 1 && old.towerBlueDead == 0 && settings["optionBlueTower"] && current.world == 2 && current.loading == 0;
 
 	bool worldSwap = current.world > old.world && settings["optionWorld"];
 
@@ -97,7 +97,12 @@ split
 
 	bool outroSplit = settings["optionOutro"] && current.arenaFinished == 1 && current.feverUsed == 1 && current.world == 3;
 
-	bool puzzleSplit = settings["optionPuzzle"] && current.puzzleSolved == 1 && old.puzzleSolved == 0 && current.world == 2;
+	bool puzzleSplit = settings["optionPuzzle"] && current.puzzleSolved == 1 && old.puzzleSolved == 0 && current.world == 2 && current.loading == 0;
+	
+	if (janusDedSplit) {vars.janusSplit = 1;}
+	if (towerRedDeadSplit) {vars.redSplit = 1;}
+	if (towerYellowDeadSplit) {vars.yellowSplit = 1;}
+	if (towerBlueDeadSplit) {vars.blueSplit = 1;}
 	
 	return (janusDedSplit || towerRedDeadSplit || towerYellowDeadSplit || towerBlueDeadSplit || worldSwap || arenaSwap || arenaDone || outroSplit || puzzleSplit);
 
