@@ -69,6 +69,10 @@ start
 	if (current.loading == 1 && current.world == 1)
     {
 		vars.fresh = 1;
+		vars.janusSplit = 0;
+		vars.redSplit = 0;
+		vars.yellowSplit = 0;
+		vars.blueSplit = 0;
         return true;
     }
 
@@ -77,49 +81,26 @@ start
 // Split
 split
 {	
-	if (vars.janusSplit == 0 && current.janusDead == 1 && old.janusDead == 0 && settings["optionJanus"] && current.world == 1)
-	{
-		vars.janusSplit = 1;
-		return true;
-	}
-	if (vars.redSplit == 0 && current.towerRedDead == 1 && old.towerRedDead == 0 && settings["optionRedTower"] && current.world == 2)
-	{
-		vars.redSplit = 1;
-		return true;
-	}
-	if (vars.yellowSplitSplit == 0 && current.towerYellowDead == 1 && old.towerYellowDead == 0 && settings["optionYellowTower"] && current.world == 2)
-	{
-		vars.yellowSplit = 1;
-		return true;
-	}
-	if (vars.blueSplitSplit == 0 && current.towerBlueDead == 1 && old.towerBlueDead == 0 && settings["optionBlueTower"] && current.world == 2)
-	{
-		vars.blueSplit = 1;
-		return true;
-	}	
-	if (current.world == old.world + 1 && settings["optionWorld"])
-	{
-		return true;
-	}
-	if (settings["optionArena"])
-	{
-		if (current.arenaCurWave == old.arenaCurWave + 1 && current.world == 3)
-		{
-			return true;
-		}
-		if (current.arenaFinished == 1 && old.arenaFinished == 0 && current.world == 3)
-		{
-			return true;
-		}
-	}
-	if (settings["optionOutro"] && current.arenaFinished == 1 && current.feverUsed == 1 && current.world == 3)
-	{
-		return true;
-	}
-	if (settings["optionPuzzle"] && current.puzzleSolved == 1 && old.puzzleSolved == 0 && current.world == 2)
-	{
-		return true;
-	}
+	bool janusDedSplit = vars.janusSplit == 0 && current.janusDead == 1 && old.janusDead == 0 && settings["optionJanus"] && current.world == 1;
+
+	bool towerRedDeadSplit = vars.redSplit == 0 && current.towerRedDead == 1 && old.towerRedDead == 0 && settings["optionRedTower"] && current.world == 2;
+
+	bool towerYellowDeadSplit = vars.yellowSplit == 0 && current.towerYellowDead == 1 && old.towerYellowDead == 0 && settings["optionYellowTower"] && current.world == 2;
+
+	bool towerBlueDeadSplit = vars.blueSplit == 0 && current.towerBlueDead == 1 && old.towerBlueDead == 0 && settings["optionBlueTower"] && current.world == 2;
+
+	bool worldSwap = current.world == old.world + 1 && settings["optionWorld"];
+
+	bool arenaSwap = (current.arenaCurWave > old.arenaCurWave) && settings["optionArena"] && current.world == 3;
+
+	bool arenaDone = current.arenaFinished == 1 && old.arenaFinished == 0 && current.world == 3 && settings["optionArena"];
+
+	bool outroSplit = settings["optionOutro"] && current.arenaFinished == 1 && current.feverUsed == 1 && current.world == 3;
+
+	bool puzzleSplit = settings["optionPuzzle"] && current.puzzleSolved == 1 && old.puzzleSolved == 0 && current.world == 2;
+	
+	return (janusDedSplit || towerRedDeadSplit || towerYellowDeadSplit || towerBlueDeadSplit || worldSwap || arenaSwap || arenaDone || outroSplit || puzzleSplit);
+
 }
 
 // Reset
