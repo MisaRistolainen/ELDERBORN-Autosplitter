@@ -118,7 +118,7 @@ split
 	}
 	if (settings["optionPuzzle"] && current.puzzleSolved == 1 && old.puzzleSolved == 0 && current.world == 2)
 	{
-		return true
+		return true;
 	}
 }
 
