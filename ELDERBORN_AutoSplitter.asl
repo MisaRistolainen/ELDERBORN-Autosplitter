@@ -3,7 +3,7 @@
 // State
 state("Elderborn")
 {
-	uint loading : "UnityPlayer.dll", 0x146D198, 0x0, 0x7A8, 0xAC8, 0x28, 0x18, 0x0, 0x0, 0x1108;
+	byte loading : "UnityPlayer.dll", 0x144ED28, 0x40, 0x108, 0x0, 0x0, 0x18, 0x0, 0x0, 0x1108;
 	uint towerRedDead : "UnityPlayer.dll", 0x146FCC8, 0x8, 0x10, 0xB8, 0x80, 0xD8, 0x48, 0x20, 0x61;
 	uint towerYellowDead : "UnityPlayer.dll", 0x146FCC8, 0x8, 0x10, 0xB8, 0x80, 0xD8, 0x70, 0x20, 0x61;
 	uint towerBlueDead : "UnityPlayer.dll", 0x13B58F0, 0x28, 0x1D20, 0x70, 0x2A0, 0x30, 0x98, 0x60, 0x61;
@@ -89,7 +89,7 @@ split
 
 	bool towerBlueDeadSplit = vars.blueSplit == 0 && current.towerBlueDead == 1 && old.towerBlueDead == 0 && settings["optionBlueTower"] && current.world == 2;
 
-	bool worldSwap = current.world == old.world + 1 && settings["optionWorld"];
+	bool worldSwap = current.world > old.world && settings["optionWorld"];
 
 	bool arenaSwap = (current.arenaCurWave > old.arenaCurWave) && settings["optionArena"] && current.world == 3 && current.arenaCurWave != 255;
 
@@ -111,12 +111,5 @@ reset
 
 isLoading
 {
-	if (current.loading == 1 && settings["optionLoads"])
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return current.loading == 1 && settings["optionLoads"];
 }
