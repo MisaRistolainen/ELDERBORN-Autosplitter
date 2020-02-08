@@ -11,7 +11,7 @@ state("Elderborn")
 	uint janusPhase : "UnityPlayer.dll", 0x13B3A10, 0x78, 0x40, 0x10, 0x10, 0x18, 0x20, 0x138, 0x44C;
 	byte world : "UnityPlayer.dll", 0x1449580, 0xD8, 0x50, 0x368, 0xA0, 0x610, 0x0, 0x20, 0x74;
 	byte feverUsed : "UnityPlayer.dll", 0x13B6330, 0x80, 0x580, 0x170, 0x98, 0x40, 0x80, 0xBD;
-	byte arenaFinished : "UnityPlayer.dll", 0x13B6330, 0x80, 0x580, 0x170, 0x98, 0x40, 0x80, 0x40, 0xBF;
+	byte arenaFinished : "UnityPlayer.dll", 0x146E520, 0x3B8, 0x0, 0x18, 0x30, 0xB8, 0x80, 0x40, 0xBF;
 	byte arenaCurWave : "UnityPlayer.dll", 0x146E520, 0x3B8, 0x0, 0x18, 0x30, 0xB8, 0x80, 0x40, 0xB4;
 	byte puzzleSolved : "UnityPlayer.dll", 0x147F910, 0x40, 0x1F8, 0x30, 0x70, 0x0, 0x98, 0x28, 0x6D0;
 }
@@ -25,6 +25,7 @@ init
 	vars.redSplit = 0;
 	vars.yellowSplit = 0;
 	vars.blueSplit = 0;
+	vars.currentArena = 0;
 }
 
 // Updating
@@ -80,6 +81,7 @@ start
 		vars.redSplit = 0;
 		vars.yellowSplit = 0;
 		vars.blueSplit = 0;
+		vars.currentArena = 0;
         return true;
     }
 
@@ -102,7 +104,7 @@ split
 
 	bool worldSwap = current.world > old.world && settings["optionWorld"];
 
-	bool arenaSwap = (current.arenaCurWave > old.arenaCurWave) && settings["optionArena"] && current.world == 3 && current.arenaCurWave != 255;
+	bool arenaSwap = (current.arenaCurWave > vars.currentArena) && settings["optionArena"] && current.world == 3 && current.arenaCurWave != 255 && old.arenaCurWave != 255;
 
 	bool arenaDone = current.arenaFinished == 1 && old.arenaFinished == 0 && current.world == 3 && settings["optionArena"];
 
@@ -114,6 +116,7 @@ split
 	if (towerRedDeadSplit) {vars.redSplit = 1;}
 	if (towerYellowDeadSplit) {vars.yellowSplit = 1;}
 	if (towerBlueDeadSplit) {vars.blueSplit = 1;}
+	if (arenaSwap) {vars.currentArena = current.arenaCurWave;}
 	
 	return (janusDedSplit || janusPhaseSplit || janusStartSplit || towerRedDeadSplit || towerYellowDeadSplit || towerBlueDeadSplit || worldSwap || arenaSwap || arenaDone || outroSplit || puzzleSplit);
 
