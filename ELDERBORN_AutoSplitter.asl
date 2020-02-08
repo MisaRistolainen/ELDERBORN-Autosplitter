@@ -8,6 +8,7 @@ state("Elderborn")
 	uint towerYellowDead : "UnityPlayer.dll", 0x146FCC8, 0x8, 0x10, 0xB8, 0x80, 0xD8, 0x70, 0x20, 0x61;
 	uint towerBlueDead : "UnityPlayer.dll", 0x13B58F0, 0x28, 0x1D20, 0x70, 0x2A0, 0x30, 0x98, 0x60, 0x61;
 	byte janusDead : "UnityPlayer.dll", 0x147F910, 0x40, 0xA38, 0x30, 0x30, 0x58, 0x28, 0x150, 0x170;
+	uint janusPhase : "UnityPlayer.dll", 0x13B3A10, 0x78, 0x40, 0x10, 0x10, 0x18, 0x20, 0x138, 0x44C;
 	byte world : "UnityPlayer.dll", 0x1449580, 0xD8, 0x50, 0x368, 0xA0, 0x610, 0x0, 0x20, 0x74;
 	byte feverUsed : "UnityPlayer.dll", 0x13B6330, 0x80, 0x580, 0x170, 0x98, 0x40, 0x80, 0xBD;
 	byte arenaFinished : "UnityPlayer.dll", 0x13B6330, 0x80, 0x580, 0x170, 0x98, 0x40, 0x80, 0x40, 0xBF;
@@ -38,8 +39,14 @@ startup
     settings.Add("optionLoads", true, "Load Removal");
 	settings.SetToolTip("optionLoads", "Remove loads");
 	
-    settings.Add("optionJanus", true, "Janus Split");
+    settings.Add("optionJanus", true, "Janus Dead Split");
 	settings.SetToolTip("optionJanus", "Splits when Janus dies in the C1 bossfight");
+	
+	settings.Add("optionJanusPhases", true, "Janus Phases Split");
+	settings.SetToolTip("optionJanusPhases", "Splits when Janus changes phases (3 phases)");
+	
+	settings.Add("optionJanusBegin", true, "Janus Fight Start Split");
+	settings.SetToolTip("optionJanusBegin", "Splits when Janus fight starts");
 	
     settings.Add("optionRedTower", true, "Red Tower Split");
 	settings.SetToolTip("optionRedTower", "Splits when Red Tower Priest has died");
@@ -82,6 +89,10 @@ start
 split
 {	
 	bool janusDedSplit = vars.janusSplit == 0 && current.janusDead == 1 && old.janusDead == 0 && settings["optionJanus"] && current.world == 1 && current.loading == 0;
+	
+	bool janusPhaseSplit = current.janusPhase == (old.janusPhase + 1) && current.janusPhase != 1 && settings["optionJanusPhases"] && current.world == 1 && current.loading == 0;
+	
+	bool janusStartSplit = current.janusPhase == 1 && old.janusPhase == 0 && settings["optionJanusBegin"] && current.world == 1 && current.loading == 0;
 
 	bool towerRedDeadSplit = vars.redSplit == 0 && current.towerRedDead == 1 && old.towerRedDead == 0 && settings["optionRedTower"] && current.world == 2 && current.loading == 0;
 
@@ -104,7 +115,7 @@ split
 	if (towerYellowDeadSplit) {vars.yellowSplit = 1;}
 	if (towerBlueDeadSplit) {vars.blueSplit = 1;}
 	
-	return (janusDedSplit || towerRedDeadSplit || towerYellowDeadSplit || towerBlueDeadSplit || worldSwap || arenaSwap || arenaDone || outroSplit || puzzleSplit);
+	return (janusDedSplit || janusPhaseSplit || janusStartSplit || towerRedDeadSplit || towerYellowDeadSplit || towerBlueDeadSplit || worldSwap || arenaSwap || arenaDone || outroSplit || puzzleSplit);
 
 }
 
