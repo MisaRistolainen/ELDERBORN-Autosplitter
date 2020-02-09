@@ -100,7 +100,7 @@ split
 
 	bool towerYellowDeadSplit = vars.yellowSplit == 0 && current.towerYellowDead == 1 && old.towerYellowDead == 0 && settings["optionYellowTower"] && current.world == 2;
 
-	bool towerBlueDeadSplit = vars.blueSplit == 0 && current.towerBlueDead == 1 && old.towerBlueDead == 0 && settings["optionBlueTower"] && current.world == 2 &&;
+	bool towerBlueDeadSplit = vars.blueSplit == 0 && current.towerBlueDead == 1 && old.towerBlueDead == 0 && settings["optionBlueTower"] && current.world == 2;
 
 	bool worldSwap = current.world > old.world && settings["optionWorld"];
 
