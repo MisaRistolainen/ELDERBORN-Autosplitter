@@ -126,7 +126,7 @@ split
 // Reset
 reset
 {
-	return current.inMenu;
+	return current.inMenu == 1;
 }
 
 isLoading
