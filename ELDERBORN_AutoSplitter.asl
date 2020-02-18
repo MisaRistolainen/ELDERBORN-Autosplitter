@@ -75,7 +75,7 @@ startup
  // Start Timer
 start
 {
-	if (current.loading == 0 && old.loading == 1 && old.inMenu == 1 && current.inMenu == 0)
+	if (current.loading == 0 && old.loading == 1 && current.inMenu == 0)
     {
 		vars.fresh = 1;
 		vars.janusSplit = 0;
